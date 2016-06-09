@@ -1,0 +1,107 @@
+<div class="page-header">
+  <h3><%= @article.title %></h3>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <dl class="dl-horizontal">
+      <dt>Title</dt>
+      <dd><%= @article.title %></dd>
+
+      <dt>Date</dt>
+      <dd><%= @article.date %></dd>
+
+      <dt>Link</dt>
+      <dd><a href="<%= @article.link %>"><%= @article.link %></a></dd>
+
+      <dt>Average Rating</dt>
+      <dd><%= Rating.where(article_id: @article.id).average("rating") %></dd>
+
+      <dt>Journalist</dt>
+      <dd><a href="<%= @article.journalist.name%>"><%= @article.journalist.name%></a></dd>
+
+    </dl>
+
+    <div class="btn-group btn-group-justified">
+      <a href="/articles" class="btn btn-primary">
+        Back
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="row top-buffer">
+  <div class="col-md-12">
+    <table class="table table-striped table-hover">
+      <tr>
+        <th>Rating</th>
+        <th>Comment</th>
+        <th>User</th>
+        <th>Actions</th>
+      </tr>
+
+      <% @ratings.each do |rating| %>
+      <tr>
+        <td><%= rating.rating %></td>
+        <td><%= rating.body %></td>
+        <td><%= rating.user.username %></td>
+        <td>
+          <% if current_user.present? %>
+            <% if current_user.id == rating.user_id %>
+              <a href="/ratings/<%= rating.id %>" class="btn btn-primary">Show</a>
+              <a href="/ratings/<%= rating.id %>/edit" class="btn btn-warning">Edit</a>
+              <a href="/delete_rating/<%= rating.id %>" class="btn btn-danger" rel="nofollow">Delete</a>
+            <% else %>
+              <a href="/ratings/<%= rating.id %>" class="btn btn-primary">Show</a>
+            <% end %>
+          <% else %>
+              <a href="/ratings/<%= rating.id %>" class="btn btn-primary">Show</a>
+          <% end %>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
+
+<% if current_user.present? %>
+<div class="row">
+  <div class="col-md-12">
+    <form action="/create_rating" method="post">
+      <!-- Hidden input for authenticity token to protect from forgery -->
+      <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+
+      <!-- Label and input for article_id -->
+      <input type="hidden" name="article_id" value="<%= @article.id %>">
+
+      <!-- Label and input for rating -->
+      <div class="form-group">
+        <label for="rating" class="control-label">
+          Rating
+        </label>
+
+        <input type="text" id="rating" name="rating" placeholder="Choose an integer from 1 to 10" class="form-control" value="<%= @rating.rating %>">
+      </div>
+
+      <!-- Label and input for body -->
+      <div class="form-group">
+        <label for="body" class="control-label">
+          Comment
+        </label>
+
+        <textarea id="body" name="body" placeholder="Comment" class="form-control" rows="3"><%= @rating.body %></textarea>
+      </div>
+
+      <!-- Label and input for user_id -->
+      <input type="hidden" name="user_id" value="<%= current_user.id %>">
+
+      <button class="btn btn-success">
+        Create Rating
+      </button>
+      or
+      <a href="/ratings">Cancel</a>
+    </form>
+  </div>
+</div>
+<% else %>
+<% end %>

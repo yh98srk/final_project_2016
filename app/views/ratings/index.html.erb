@@ -1,0 +1,42 @@
+<div class="page-header">
+  <h1>
+    Ratings
+    <a href="/ratings/new" class="btn btn-lg btn-success">New Rating</a>
+  </h1>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-striped table-hover">
+      <tr>
+        <th>Article</th>
+        <th>Rating</th>
+        <th>Comment</th>
+        <th>User</th>
+        <th>Actions</th>
+      </tr>
+
+      <% @ratings.each do |rating| %>
+      <tr>
+        <td><%= rating.article.title %></td>
+        <td><%= rating.rating %></td>
+        <td><%= rating.body %></td>
+        <td><%= rating.user.username %></td>
+        <td>
+          <% if current_user.present? %>
+            <% if current_user.id == rating.user_id %>
+              <a href="/ratings/<%= rating.id %>" class="btn btn-primary">Show</a>
+              <a href="/ratings/<%= rating.id %>/edit" class="btn btn-warning">Edit</a>
+              <a href="/delete_rating/<%= rating.id %>" class="btn btn-danger" rel="nofollow">Delete</a>
+            <% else %>
+              <a href="/ratings/<%= rating.id %>" class="btn btn-primary">Show</a>
+            <% end %>
+          <% else %>
+            <a href="/ratings/<%= rating.id %>" class="btn btn-primary">Show</a>
+          <% end %>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>

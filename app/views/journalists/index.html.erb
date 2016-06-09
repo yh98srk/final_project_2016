@@ -1,0 +1,28 @@
+<div class="page-header">
+  <h1>
+    Journalists
+    <a href="/journalists/new" class="btn btn-lg btn-success">New Journalist</a>
+  </h1>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-striped table-hover">
+      <tr>
+        <th>Name</th>
+        <th>Media</th>
+        <th>Actions</th>
+      </tr>
+
+      <% @journalists.each do |journalist| %>
+      <tr>
+        <td><%= journalist.name %></td>
+        <td><%= journalist.media %></td>
+        <td>
+          <a href="/journalists/<%= journalist.id %>" class="btn btn-primary">Show</a>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>

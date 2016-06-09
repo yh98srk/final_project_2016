@@ -1,0 +1,45 @@
+<div class="page-header">
+  <h3><%= @rating.user.username %>'s rating for <%= @rating.article.title%></h3>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <dl class="dl-horizontal">
+      <dt>Article</dt>
+      <dd><%= @rating.article.title%></dd>
+
+      <dt>Rating</dt>
+      <dd><%= @rating.rating %></dd>
+
+      <dt>Comment</dt>
+      <dd><%= @rating.body %></dd>
+
+      <dt>User</dt>
+      <dd><%= @rating.user.username %></dd>
+
+    </dl>
+
+    <div class="btn-group btn-group-justified">
+      <% if current_user.present? %>
+        <% if current_user.id == @rating.user_id %>
+          <a href="/ratings" class="btn btn-primary">
+            Back
+          </a>
+          <a href="/ratings/<%= @rating.id %>/edit" class="btn btn-warning">
+            Edit
+          </a>
+          <a href="/delete_rating/<%= @rating.id %>" class="btn btn-danger" rel="nofollow">
+            Delete
+          </a>
+        <% else %>
+          <a href="/ratings" class="btn btn-primary">
+            Back
+          </a>
+        <% end %>
+      <% else %>
+          <a href="/ratings" class="btn btn-primary">
+            Back
+      <% end %>
+    </div>
+  </div>
+</div>

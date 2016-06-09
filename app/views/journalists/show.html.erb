@@ -1,0 +1,96 @@
+<div class="page-header">
+  <h3><%= @journalist.name %></h3>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <dl class="dl-horizontal">
+      <dt>Name</dt>
+      <dd><%= @journalist.name %></dd>
+
+      <dt>Media</dt>
+      <dd><%= @journalist.media %></dd>
+    </dl>
+
+    <div class="btn-group btn-group-justified">
+      <a href="/journalists" class="btn btn-primary">
+        Back
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="row top-buffer">
+  <div class="col-md-12">
+    <table class="table table-striped table-hover">
+      <tr>
+        <th>Title</th>
+        <th>Date</th>
+        <th>Link</th>
+        <th>Average Rating</th>
+        <th>Actions</th>
+      </tr>
+
+      <% @articles.each do |article| %>
+      <tr>
+        <td><a href="/articles/<%= article.id %>"><%= article.title %></a></td>
+        <td><%= article.date %></td>
+        <td><a href="<%= article.link %>"><%= article.link %></a></td>
+        <td><%= Rating.where(article_id: article.id).average("rating") %></td>
+        <td>
+          <a href="/articles/<%= article.id %>" class="btn btn-primary">Show</a>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
+
+<% if current_user.present? %>
+<div class="row">
+  <div class="col-md-12">
+    <form action="/create_article" method="post">
+      <!-- Hidden input for authenticity token to protect from forgery -->
+      <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+
+      <!-- Label and input for title -->
+      <div class="form-group">
+        <label for="title" class="control-label">
+          Title
+        </label>
+
+        <input type="text" id="title" name="title" placeholder="Title" class="form-control" value="<%= @article.title %>">
+      </div>
+
+      <!-- Label and input for date -->
+      <div class="form-group">
+        <label for="date" class="control-label">
+          Date (mm/dd/yy)
+        </label>
+
+        <input type="text" id="date" name="date" placeholder="Date" class="form-control" value="<%= @article.date %>">
+      </div>
+
+      <!-- Label and input for link -->
+      <div class="form-group">
+        <label for="link" class="control-label">
+          Link
+        </label>
+
+        <textarea id="link" name="link" placeholder="Link" class="form-control" rows="3"><%= @article.link %></textarea>
+      </div>
+
+      <!-- Label and input for journalist_id -->
+      <div class="form-group">
+      <input type="hidden" name="journalist_id" value="<%= @journalist.id %>">
+
+      <button class="btn btn-success">
+        Create Article
+      </button>
+      or
+      <a href="/articles">Cancel</a>
+    </form>
+  </div>
+</div>
+<% else %>
+<% end %>
